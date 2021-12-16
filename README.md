@@ -55,7 +55,7 @@ Kasian [sanity](https://www.sanity.io/) gak ada badge.
           name: 'description',
           title: 'Description',
           type: 'string',
-          description: "What's the subtitle of the homepage hero?",
+          description: "Project description.",
           validation: (Rule) => [Rule.required().error('Field cannot be empty')],
         },
         {
