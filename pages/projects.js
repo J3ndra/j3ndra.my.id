@@ -11,15 +11,18 @@ import {
     useColorModeValue
 } from '@chakra-ui/react'
 import {
-    AiOutlineCheckCircle,
     AiOutlineGithub,
     AiOutlineLink,
   } from 'react-icons/ai'
 import { getProjects } from '../lib/api'
+import Head from 'next/head'
 
 export default function Projects({ projects } = props) {
     return (
         <Stack spacing={4}>
+            <Head>
+                <title>Projects</title>
+            </Head>
             <HStack>
                 <Heading as='h1' size='2xl' fontWeight='bold'>
                     Maintaned projects by me.

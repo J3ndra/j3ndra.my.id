@@ -18,7 +18,8 @@ import {
   AiOutlineGithub,
   AiOutlineLink,
 } from 'react-icons/ai'
-import { getProjects } from '../lib/api';
+import { getProjects } from '../lib/api'
+import Head from 'next/head'
 
 export default function Index({ projects } = props) {
 
@@ -32,6 +33,9 @@ export default function Index({ projects } = props) {
 
   return (
     <Stack spacing={4}>
+      <Head>
+        <title>Home</title>
+      </Head>
       <HStack>
         <Heading as='h1' size='2xl' fontWeight='bold'>
           Halo, Koh Endru here
