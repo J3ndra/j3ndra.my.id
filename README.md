@@ -1,5 +1,7 @@
 # j3ndra.my.id
 
+![Deploy as Docker Image](https://github.com/J3ndra/j3ndra.my.id/actions/workflows/docker.yml/badge.svg)
+
 ### _Build with 🛠️._
 <p>
     <img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" />
