@@ -85,9 +85,11 @@ Kasian [sanity](https://www.sanity.io/) gak ada badge.
 6. `yarn dev` to start `Next.js`
 
 ## 🐬 Create Docker Image
-1. `docker-compose up -d --build`.
-2. `docker ps -a` to see if it already running.
-3. Now just check `http://localhost:3000` in your browser.
+1. `docker build --build-arg NEXT_PUBLIC_SANITY_PROJECT_ID=$NEXT_PUBLIC_SANITY_PROJECT_ID --build-arg SANITY_API_TOKEN=$SANITY_API_TOKEN -t app .`.
+2. `docker run -p 3000:3000 app` to start.
+3. `docker ps` to see if it already running.
+4. Now just check `http://localhost:3000` in your browser.
+5. To stop docker, open new terminal, `docker stop <Container ID>`.
 
 ## Thanks to
 - Tutorial by [Benjamin Carlson](https://www.youtube.com/c/BenjaminCarlson)
