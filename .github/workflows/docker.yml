@@ -1,67 +1,42 @@
-name: Build and Deploy
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+name: Create and publish a Docker image
+
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'
-        required: true
-        default: 'warning'
+    branches: ['main']
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  create-envfile:
+
     runs-on: ubuntu-latest
-    container: node:16
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout Repo
-        uses: actions/checkout@v2
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Build and Publish to Github Packages Registry
-        uses: elgohr/Publish-Docker-Github-Action@master
-        env:
-          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
-          SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
-        with:
-          name: J3ndra/j3ndra.my.id/app
-          registry: ghcr.io
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.GIT_TOKEN }}
-          dockerfile: Dockerfile
-          buildargs: NEXT_PUBLIC_SANITY_PROJECT_ID,SANITY_API_TOKEN
-          tags: latest
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v1
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+    - name: Build and push
+      id: docker_build
+      uses: docker/build-push-action@v2
+      env:
+        NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+        SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
+      with:
+        context: ./
+        file: ./Dockerfile
+        buildargs: NEXT_PUBLIC_SANITY_PROJECT_ID,SANITY_API_TOKEN
+        push: true
+        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/koh-endru
 
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        env:
-          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
-          SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
-        with:
-          context: ./
-          file: ./Dockerfile
-          buildargs: NEXT_PUBLIC_SANITY_PROJECT_ID,SANITY_API_TOKEN
-          push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/koh-endru
-
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+    - name: Image digest
+      run: echo ${{ steps.docker_build.outputs.digest }}
