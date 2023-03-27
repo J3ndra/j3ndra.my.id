@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build and Publish to Github Packages Registry
-        uses: elgohr/Publish-Docker-Github-Action@master
+        uses: elgohr/Publish-Docker-Github-Action@v5
         env:
           NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
           SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
